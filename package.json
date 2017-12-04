@@ -1,0 +1,22 @@
+{
+  "name": "funny-dev",
+  "version": "1.0.0",
+  "description": "FunnyDev is a flexible project management web application. Created using Node.js.",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexInDaHouse/FunnyDev.git"
+  },
+  "author": "Rendering6",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlexInDaHouse/FunnyDev/issues"
+  },
+  "homepage": "https://github.com/AlexInDaHouse/FunnyDev#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
