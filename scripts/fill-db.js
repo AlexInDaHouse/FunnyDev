@@ -9,7 +9,8 @@ const createTestUsers = async () => {
         new User({
             firstName: 'Alice',
             lastName: 'Kingsley',
-            login: 'alice.kingsley@example.com',
+            login: 'alice.kingsley',
+            email: 'alice.kingsley@example.com',
             password: 'test.passwd.alice',
             avatar: 'alice.jpeg',
             specialty: ['Traveler to Wonderland', 'Developer', 'Designer'],
@@ -19,7 +20,8 @@ const createTestUsers = async () => {
         new User({
             firstName: 'Bob',
             lastName: 'Dylan',
-            login: 'bob.dylan@example.com',
+            login: 'bob.dylan',
+            email: 'bob.dylan@example.com',
             password: 'test.passwd.bob',
             avatar: 'bob.jpeg',
             specialty: ['Musician'],
@@ -29,7 +31,8 @@ const createTestUsers = async () => {
         new User({
             firstName: 'Eva',
             lastName: 'Green',
-            login: 'eva.green@example.com',
+            login: 'eva.green',
+            email: 'eva.green@example.com',
             password: 'test.passwd.eva',
             avatar: 'eva.jpeg',
             specialty: ['Actress'],
