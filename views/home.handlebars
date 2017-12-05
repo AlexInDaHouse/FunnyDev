@@ -1,0 +1,11 @@
+<h1>Home</h1>
+{{#if users}}
+    {{#each users}}
+        {{#if active}}
+            <h1>{{firstName}} {{lastName}}</h1>
+            <p>Email: {{email}}, Avatar: {{avatar}}.</p>
+        {{/if}}
+    {{/each}}
+{{else}}
+    <p>Nothing</p>
+{{/if}}

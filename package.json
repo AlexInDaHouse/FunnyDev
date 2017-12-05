@@ -4,7 +4,9 @@
   "description": "FunnyDev is a flexible project management web application. Created using Node.js.",
   "main": "app.js",
   "scripts": {
-    "test": "test"
+    "test": "mocha ./tests/*.test.js",
+    "fill-db": "node ./scripts/fill-db.js",
+    "clear-db": "node ./scripts/clear-db.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,9 @@
   },
   "homepage": "https://github.com/AlexInDaHouse/FunnyDev#readme",
   "dependencies": {
-    "express": "^4.16.2"
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-handlebars": "^3.0.0",
+    "mongoose": "^4.13.6"
   }
 }
