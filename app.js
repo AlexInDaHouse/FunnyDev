@@ -35,8 +35,12 @@ app.get('/', function(req, res) {
     });
 });
 
-app.get('/login', function (req, res) {
+app.get('/sign-in', function (req, res) {
     res.render('sign-in', { title: 'Sign in' });
+});
+
+app.get('/sign-up', function (req, res) {
+    res.render('sign-up', { title: 'Sign up' });
 });
 
 app.listen(3000);
