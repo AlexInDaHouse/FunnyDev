@@ -23,7 +23,7 @@ function run(env) {
 				//
 				break;
 			default:
-				throw new Error('Environment is undefined!');
+				new Error('Environment is undefined!');
 		}
 	}
 	catch (ex) {
@@ -35,14 +35,14 @@ function run(env) {
 	// Run npm install
 	function runNpmInstall() {
 		console.info('Installing dependencies...');
-		const npmInstall = spawn('npm', ['install']);
+		const npmInstall = spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['install']);
 		
 		npmInstall.stderr.on('data', (data) => {
 			console.error(`Error: ${data}`);
 			throw new Error('Runtime exception. Failed on `npm install`');
 		});
 
-		npmInstall.on('close', (code) => {
+		npmInstall.on('close', () => {
 			console.info('`npm install` executed successfully.');
 		});
 	}
@@ -89,7 +89,7 @@ function getEnv(args) {
 				'--test', '-t', '-test', '--t'
 			]
 		}
-	}
+	};
 
 	if (args.length < 3) {
 		return 'dev';
