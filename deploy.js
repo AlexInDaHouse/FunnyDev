@@ -1,3 +1,5 @@
+const fs = require('fs');
+const { COPYFILE_EXCL } = fs.constants;
 const { spawn } = require('child_process');
 
 run(getEnv(process.argv));
@@ -7,8 +9,8 @@ function run(env) {
 	console.info(`Starting deployment (env: ${env.name})...`);
 
 	try {
-
 		runNpmInstall();
+		createConfigFile(env);
 
 		switch (env.alias) {
 			case 'dev':
@@ -29,7 +31,7 @@ function run(env) {
 		console.error(ex.message);
 		console.error(ex.stack);
 	}
-	
+
 	// Run npm install
 	function runNpmInstall() {
 		console.info('Installing dependencies...');
@@ -43,6 +45,21 @@ function run(env) {
 		npmInstall.on('close', (code) => {
 			console.info('`npm install` executed successfully.');
 		});
+	}
+
+	function createConfigFile(env) {
+		try {
+			if (env.alias === 'dev') {
+				fs.createReadStream('config.example.js')
+					.pipe(fs.createWriteStream('config.js'));
+			}
+			else {
+				fs.renameSync('config.example.js', 'config.js');
+			}
+		}
+		catch (ex) {
+			console.error(ex.message);
+		}
 	}
 }
 
