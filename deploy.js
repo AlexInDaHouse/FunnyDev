@@ -48,6 +48,7 @@ function run(env) {
 	}
 
 	function createConfigFile(env) {
+		console.log('Creating config file...');
 		try {
 			if (env.alias === 'dev') {
 				fs.createReadStream('config.example.js')
@@ -56,6 +57,7 @@ function run(env) {
 			else {
 				fs.renameSync('config.example.js', 'config.js');
 			}
+			console.info('config.js was created.');
 		}
 		catch (ex) {
 			console.error(ex.message);

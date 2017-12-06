@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('../models/user');
+const CryptoJS = require('crypto-js');
 const config = require('../config');
 
 mongoose.Promise = global.Promise;
@@ -11,9 +12,9 @@ const createTestUsers = async () => {
             lastName: 'Kingsley',
             login: 'alice.kingsley',
             email: 'alice.kingsley@example.com',
-            password: 'test.passwd.alice',
+            password: CryptoJS.SHA256('test.passwd.alice').toString(),
             avatar: 'alice.jpeg',
-            specialty: ['Traveler to Wonderland', 'Developer', 'Designer'],
+            specialty: 'Developer',
             role: 'test',
             active: true
         }),
@@ -22,9 +23,9 @@ const createTestUsers = async () => {
             lastName: 'Dylan',
             login: 'bob.dylan',
             email: 'bob.dylan@example.com',
-            password: 'test.passwd.bob',
+            password: CryptoJS.SHA256('test.passwd.bob').toString(),
             avatar: 'bob.jpeg',
-            specialty: ['Musician'],
+            specialty: 'Musician',
             role: 'test',
             active: true
         }),
@@ -33,9 +34,9 @@ const createTestUsers = async () => {
             lastName: 'Green',
             login: 'eva.green',
             email: 'eva.green@example.com',
-            password: 'test.passwd.eva',
+            password: CryptoJS.SHA256('test.passwd.eva').toString(),
             avatar: 'eva.jpeg',
-            specialty: ['Actress'],
+            specialty: 'Screenwriter',
             role: 'test',
             active: true
         })
