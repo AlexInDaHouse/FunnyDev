@@ -7,6 +7,8 @@ const config = require('./config');
 const User = require('./models/user');
 
 const app = express();
+app.set('port', process.env.PORT || 3000)
+
 mongoose.Promise = global.Promise;
 
 app.engine('handlebars', handlebars.engine);
@@ -43,5 +45,24 @@ app.get('/sign-up', function (req, res) {
     res.render('sign-up', { title: 'Sign up' });
 });
 
-app.listen(3000);
-console.info('Listening on port 3000...');
+// app.get('/error-test', function(req, res) {
+// 	//
+// });
+
+app.use(function(req, res, next) {
+	res.type('text/html');
+	res.status(404);
+	res.render('404');
+});
+
+app.use(function(err, req, res, next) {
+	console.log('Error: ' + err.name);
+	console.log(err.stack);
+	res.type('text/html');
+	res.status(500);
+	res.render('505');
+});
+
+app.listen(app.get('port'), function() {
+	console.info(`Listening on port ${app.get('port')}...`);
+});
