@@ -7,7 +7,7 @@ const config = require('./config');
 const User = require('./models/user');
 
 const app = express();
-app.set('port', process.env.PORT || 3000)
+app.set('port', process.env.PORT || 3000);
 
 mongoose.Promise = global.Promise;
 
@@ -15,6 +15,7 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 app.use(express.static(__dirname + '/src'));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
 app.get('/', function(req, res) {
@@ -45,17 +46,22 @@ app.get('/sign-up', function (req, res) {
     res.render('sign-up', { title: 'Sign up' });
 });
 
+app.post('/reg', function (req, res) {
+    console.log(req.body.first_name);
+    res.redirect(303, '/');
+});
+
 // app.get('/error-test', function(req, res) {
 // 	//
 // });
 
-app.use(function(req, res, next) {
+app.use(function(req, res) {
 	res.type('text/html');
 	res.status(404);
 	res.render('404');
 });
 
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
 	console.log('Error: ' + err.name);
 	console.log(err.stack);
 	res.type('text/html');

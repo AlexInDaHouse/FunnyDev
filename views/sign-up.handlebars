@@ -1,5 +1,11 @@
 <h1>Sign up</h1>
-<form>
-    <input type="text" placeholder="Name"/>
-    <input type="text" placeholder="Last Name"/>
+<form role="form" action="/reg" method="post">
+    <input type="text" name="login" placeholder="Login" required pattern="^[A-Za-z0-9]+" autofocus/><br>
+    <input type="password" name="password" placeholder="Password" required pattern="^[A-Za-z0-9]+"/><br>
+    <input type="password" name="password2" placeholder="Repeat password" required pattern="^[A-Za-z0-9]+"/><br>
+    <input type="text" name="first_name" placeholder="Name"/><br>
+    <input type="text" name="last_name" placeholder="Last Name"/><br>
+    <input type="email" name="email" placeholder="Email" required/><br>
+    <button type="submit" class="btn btn-primary">Sign up</button>
+    <button type="button" class="btn btn-link" onclick="location.pathname = '/sign-in'">Sign in</button>
 </form>
