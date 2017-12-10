@@ -1,8 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const handlebars = require('express-handlebars').create({ defaultLayout: 'main' });
 const config = require('./config');
+const userController = require('./controllers/user-controller');
 
 const User = require('./models/user');
 
@@ -16,6 +18,7 @@ app.set('view engine', 'handlebars');
 
 app.use(express.static(__dirname + '/src'));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser(config.cookieSecret));
 
 // Routes
 app.get('/', function(req, res) {
@@ -46,27 +49,24 @@ app.get('/sign-up', function (req, res) {
     res.render('sign-up', { title: 'Sign up' });
 });
 
-app.post('/reg', function (req, res) {
-    console.log(req.body.first_name);
-    res.redirect(303, '/');
-});
+app.post('/sign-up', userController.register(req, res));
 
 // app.get('/error-test', function(req, res) {
 // 	//
 // });
 
+app.use(function(err, req, res) {
+    console.log('Error: ' + err.name);
+    console.log(err.stack);
+    res.type('text/html');
+    res.status(500);
+    res.render('505');
+});
+
 app.use(function(req, res) {
 	res.type('text/html');
 	res.status(404);
 	res.render('404');
-});
-
-app.use(function(err, req, res) {
-	console.log('Error: ' + err.name);
-	console.log(err.stack);
-	res.type('text/html');
-	res.status(500);
-	res.render('505');
 });
 
 app.listen(app.get('port'), function() {
