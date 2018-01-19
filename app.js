@@ -49,7 +49,9 @@ app.get('/sign-up', function (req, res) {
     res.render('sign-up', { title: 'Sign up' });
 });
 
-app.post('/sign-up', userController.register(req, res));
+app.post('/sign-up', function (req, res) {
+    userController.register(req, res);
+});
 
 // app.get('/error-test', function(req, res) {
 // 	//
