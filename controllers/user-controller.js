@@ -1,3 +1,6 @@
+const mongoose = require('mongoose');
+const config = require('../config');
+const CryptoJS = require('crypto-js');
 const User = require('../models/user');
 
 class UserController {
@@ -6,37 +9,51 @@ class UserController {
         if (!req.body) {
             return res.sendStatus(400);
         }
+
+        let response = '';
         
         if (req.body.password === req.body.password2) {
             let user = new User({
-                first_name: req.body.first_name || null,
-                last_name: req.body.last_name || null,
+                firstName: req.body.first_name || null,
+                lastName: req.body.last_name || null,
                 login: req.body.login,
-                password: req.body.password,
+                password: CryptoJS.SHA256(req.body.password),
                 email: req.body.email,
                 avatar: 'default.png',
-                specialty: null,
+                specialty: 'Another specialist',
                 role: 'user',
                 active: true
             });
 
             let errors = this.validate(user);
 
-            if (errors) {
-            	let message = '';
+            if (errors.length === 0) {
+            	mongoose.connect(config.mongo + '/users', { useMongoClient: true });
+            	User.create(user, (err, doc) => {
+            		mongoose.disconnect();
 
-            	for (let error of errors) {
-            		message += error + '\n';
-            	}
-            	res.end(message);
+    		        if (err) {
+					    console.error(err);
+					}
+					else {
+					    console.info('User added:' + doc);
+					}
+            	});
+
+            	response = JSON.stringify(user);
             }
             else {
-            	res.end('OK');
+            	for (let error of errors) {
+            		response += error + '\n';
+            	}
             }
         }
         else {
-        	res.end('Passwords don\'t match');
+        	response = 'Passwords don\'t match';
         }
+
+        console.log(response);
+        res.end(response);
 
         // res.redirect(303, '/');
     }

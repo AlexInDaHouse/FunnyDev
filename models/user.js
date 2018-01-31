@@ -31,17 +31,23 @@ const userScheme = new Schema({
     specialty: {
     	type: String,
     	enum: ['Developer', 'Graphic designer', 'Quality assurance', 'Musician',
-    		'Artist', '3d engineer', 'Team lead', 'Level designer', 'Screenwriter', 'Sound producer']
+    		'Artist', '3d engineer', 'Team lead', 'Level designer', 'Screenwriter',
+            'Sound producer', 'Another specialist'],
+        default: 'Another specialist'
     },
     role: {
     	type: String,
     	required: true,
-    	enum: ['admin', 'user', 'test']
+    	enum: ['admin', 'user', 'test'],
+        default: 'test'
     },
     active: {
     	type: Boolean,
     	required: true
     }
+},
+{
+    versionKey: false
 });
 
 module.exports = mongoose.model('User', userScheme);

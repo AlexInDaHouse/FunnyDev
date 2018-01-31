@@ -57,15 +57,15 @@ app.post('/sign-up', function (req, res) {
 // 	//
 // });
 
-app.use(function(err, req, res) {
+app.use(function(err, req, res, next) {
     console.log('Error: ' + err.name);
     console.log(err.stack);
     res.type('text/html');
     res.status(500);
-    res.render('505');
+    res.render('500');
 });
 
-app.use(function(req, res) {
+app.use(function(req, res, next) {
 	res.type('text/html');
 	res.status(404);
 	res.render('404');
