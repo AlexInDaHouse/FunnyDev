@@ -70,9 +70,9 @@ app.get('/logout', function (req, res) {
 
 // test
 app.get('/send-mail', function (req, res) {
-    mailer('smth@email.ru', 'hola mundo', 'test message :)');
-    res.end('testing...');
-})
+    mailer('address@email.com', 'hola mundo', 'test message :)');
+    res.end('sending...');
+});
 // end test
 
 app.post('/sign-up', function (req, res) {

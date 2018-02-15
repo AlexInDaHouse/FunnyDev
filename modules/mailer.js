@@ -1,13 +1,17 @@
-// const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
+const config = require('../config');
 
 module.exports = function(email, subject, message) {
-	const mailTransport = require('nodemailer').createTransport({
-		host: 'smtp.gmail.com',
-		port: 465,
-		secure: true,
+	const mailTransport = nodemailer.createTransport({
+		service: 'gmail',
+        secure: false,
+		port: 25,
 		auth: {
-			user: 'user',
-			pass: 'pass'
+			user: config.email.user,
+			pass: config.email.pass
+		},
+		tls: {
+			rejectUnauthorized: false
 		}
 	});
 
@@ -16,11 +20,11 @@ module.exports = function(email, subject, message) {
 		to: email,
 		subject: subject,
 		text: message
-	}, function(err) {
+	}, function(err, info) {
 		if (err) {
 			console.log(`Sending message: failed!\n${err}`);
 		} else {
-			console.log('Sending message: success!');
+			console.log(`Sending message: success!\n${info}`);
 		}
 	});
-}
+};
