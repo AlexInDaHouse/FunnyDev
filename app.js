@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const handlebars = require('express-handlebars').create({ defaultLayout: 'main' });
 const config = require('./config');
 const userController = require('./controllers/user-controller');
@@ -10,18 +11,31 @@ const User = require('./models/user');
 
 const app = express();
 app.set('port', process.env.PORT || 3000);
+app.disable('x-powered-by');
 
 mongoose.Promise = global.Promise;
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
+// Middleware
 app.use(express.static(__dirname + '/src'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser(config.cookieSecret));
+app.use(session({
+    resave: false,
+    saveUninitialized: false,
+    secret: config.cookieSecret
+}));
 
 // Routes
 app.get('/', function(req, res) {
+    //test
+    if (req.session.authUser)
+        console.log(`Session: ${req.session.authUser}`);
+    if (req.signedCookies.authUser)
+        console.log(`Cookie: ${req.signedCookies.authUser}`);
+    //end test
     mongoose.connect(config.mongo + '/users', { useMongoClient: true });
 
     User.find({}, (err, docs) => {
@@ -47,6 +61,10 @@ app.get('/sign-in', function (req, res) {
 
 app.get('/sign-up', function (req, res) {
     res.render('sign-up', { title: 'Sign up' });
+});
+
+app.get('/logout', function (req, res) {
+    userController.logout(req, res);
 });
 
 app.post('/sign-up', function (req, res) {

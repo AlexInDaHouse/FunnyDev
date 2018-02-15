@@ -44,13 +44,31 @@ class UserController {
         }
 
         if (success) {
-        	res.cookie('auth_user', user.login, { signed: true });
+        	req.session.authUser = user.login;
+        	res.cookie('authUser', user.login, {
+        		httpOnly: true,
+        		maxAge: 2 * 30 * 24 * 60 * 60 * 1000,
+        		signed: true
+        	});
+        	
+			res.redirect(303, '/');
         }
+
+        //test
+        if (req.session.authUser)
+        	console.log(`Session: ${req.session.authUser}`);
+        if (req.signedCookies.authUser)
+        	console.log(`Cookie: ${req.signedCookies.authUser}`);
+        //end test
 
         console.log(response);
         res.end(response);
+    }
 
-        // res.redirect(303, '/');
+    logout(req, res) {
+    	delete req.session.authUser;
+    	res.clearCookie('authUser');
+    	res.redirect(303, '/');
     }
 
     // Returns array of errors
