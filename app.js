@@ -8,6 +8,7 @@ const config = require('./config');
 const userController = require('./controllers/user-controller');
 
 const User = require('./models/user');
+const mailer = require('./modules/mailer');
 
 const app = express();
 app.set('port', process.env.PORT || 3000);
@@ -66,6 +67,13 @@ app.get('/sign-up', function (req, res) {
 app.get('/logout', function (req, res) {
     userController.logout(req, res);
 });
+
+// test
+app.get('/send-mail', function (req, res) {
+    mailer('smth@email.ru', 'hola mundo', 'test message :)');
+    res.end('testing...');
+})
+// end test
 
 app.post('/sign-up', function (req, res) {
     userController.register(req, res);
