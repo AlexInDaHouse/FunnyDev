@@ -10,10 +10,12 @@ class UserController {
             return res.sendStatus(400);
         }
 
+        let user;
         let response = '';
+        let success;
         
         if (req.body.password === req.body.password2) {
-            let user = new User({
+            user = new User({
                 firstName: req.body.first_name || null,
                 lastName: req.body.last_name || null,
                 login: req.body.login,
@@ -28,18 +30,7 @@ class UserController {
             let errors = this.validate(user);
 
             if (errors.length === 0) {
-            	mongoose.connect(config.mongo + '/users', { useMongoClient: true });
-            	User.create(user, (err, doc) => {
-            		mongoose.disconnect();
-
-    		        if (err) {
-					    console.error(err);
-					}
-					else {
-					    console.info('User added:' + doc);
-					}
-            	});
-
+            	success = addUserToDB(user);
             	response = JSON.stringify(user);
             }
             else {
@@ -50,6 +41,10 @@ class UserController {
         }
         else {
         	response = 'Passwords don\'t match';
+        }
+
+        if (success) {
+        	res.cookie('auth_user', user.login, { signed: true });
         }
 
         console.log(response);
@@ -81,6 +76,25 @@ class UserController {
 
     	return errors;
     }
+}
+
+async function addUserToDB(user) {
+	let success = false;
+
+	mongoose.connect(config.mongo + '/users', { useMongoClient: true });
+	await User.create(user, (err, doc) => {
+		mongoose.disconnect();
+
+        if (err) {
+		    console.error(err);
+		}
+		else {
+			success = true;
+		    console.info('User added:' + doc);
+		}
+	});
+
+	return success;
 }
 
 module.exports = new UserController();
