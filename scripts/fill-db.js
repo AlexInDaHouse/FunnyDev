@@ -5,54 +5,54 @@ const config = require('../config');
 
 mongoose.Promise = global.Promise;
 
-const createTestUsers = async () => {
-    let users = [
-        new User({
-            firstName: 'Alice',
-            lastName: 'Kingsley',
-            login: 'alice.kingsley',
-            email: 'alice.kingsley@example.com',
-            password: CryptoJS.SHA256('test.passwd.alice').toString(),
-            avatar: 'alice.jpeg',
-            specialty: 'Developer',
-            role: 'test',
-            active: true
-        }),
-        new User({
-            firstName: 'Bob',
-            lastName: 'Dylan',
-            login: 'bob.dylan',
-            email: 'bob.dylan@example.com',
-            password: CryptoJS.SHA256('test.passwd.bob').toString(),
-            avatar: 'bob.jpeg',
-            specialty: 'Musician',
-            role: 'test',
-            active: true
-        }),
-        new User({
-            firstName: 'Eva',
-            lastName: 'Green',
-            login: 'eva.green',
-            email: 'eva.green@example.com',
-            password: CryptoJS.SHA256('test.passwd.eva').toString(),
-            avatar: 'eva.jpeg',
-            specialty: 'Screenwriter',
-            role: 'test',
-            active: true
-        })
-    ];
+fillDB();
 
-    for (let user of users) {
-        await createUser(user);
-    }
-};
+async function fillDB() {
+	let users = [
+	    new User({
+	        firstName: 'Alice',
+	        lastName: 'Kingsley',
+	        login: 'alice.kingsley',
+	        email: 'alice.kingsley@example.com',
+	        password: CryptoJS.SHA256('test.passwd.alice').toString(),
+	        avatar: 'alice.jpeg',
+	        specialty: 'Developer',
+	        role: 'test',
+	        active: true
+	    }),
+	    new User({
+	        firstName: 'Bob',
+	        lastName: 'Dylan',
+	        login: 'bob.dylan',
+	        email: 'bob.dylan@example.com',
+	        password: CryptoJS.SHA256('test.passwd.bob').toString(),
+	        avatar: 'bob.jpeg',
+	        specialty: 'Musician',
+	        role: 'test',
+	        active: true
+	    }),
+	    new User({
+	        firstName: 'Eva',
+	        lastName: 'Green',
+	        login: 'eva.green',
+	        email: 'eva.green@example.com',
+	        password: CryptoJS.SHA256('test.passwd.eva').toString(),
+	        avatar: 'eva.jpeg',
+	        specialty: 'Screenwriter',
+	        role: 'test',
+	        active: true
+	    })
+	];
 
-createTestUsers();
+	for (let user of users) {
+	    await createUser(user);
+	}
+}
 
-function createUser(user) {
+async function createUser(user) {
     mongoose.connect(config.mongo + '/users', { useMongoClient: true });
 
-    User.create(user, (err, doc) => {
+    await User.create(user, (err, doc) => {
         mongoose.disconnect();
 
         if (err) {
