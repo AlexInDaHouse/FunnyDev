@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const handlebars = require('express-handlebars').create({ defaultLayout: 'main' });
 const config = require('./config');
-const userController = require('./controllers/user-controller');
+const authController = require('./controllers/auth-controller');
 
 const User = require('./models/user');
 const mailer = require('./modules/mailer');
@@ -65,7 +65,7 @@ app.get('/sign-up', function (req, res) {
 });
 
 app.get('/logout', function (req, res) {
-    userController.logout(req, res);
+    authController.logout(req, res);
 });
 
 // test
@@ -76,7 +76,7 @@ app.get('/send-mail', function (req, res) {
 // end test
 
 app.post('/sign-up', function (req, res) {
-    userController.register(req, res);
+    authController.register(req, res);
 });
 
 // app.get('/error-test', function(req, res) {
