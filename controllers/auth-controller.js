@@ -4,7 +4,7 @@ const userController = require('./user-controller');
 
 class AuthController {
 
-    register(req, res) {
+    async register(req, res) {
         if (!req.body) {
             return res.sendStatus(400);
         }
@@ -27,6 +27,10 @@ class AuthController {
             });
 
             let errors = this.validate(user);
+
+            if (await userController.exists(user.login)) {
+                errors.push('This login already exists!');
+            }
 
             if (errors.length === 0) {
             	success = userController.add(user);
