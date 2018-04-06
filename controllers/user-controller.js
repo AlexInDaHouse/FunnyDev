@@ -21,6 +21,27 @@ async function add(user) {
     return success;
 }
 
+async function exists(login) {
+	let result;
+
+    mongoose.connect(config.mongo + '/users', {
+    	useMongoClient: true
+    });
+
+    await User.findOne({ login: login }, (err, docs) => {
+    	mongoose.disconnect();
+
+    	if (err) {
+    		return console.log(err);
+    	}
+
+    	result = docs ? true : false;
+    });
+
+    return result;
+}
+
 module.exports = {
-    add: add
+    add: add,
+    exists: exists
 };
