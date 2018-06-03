@@ -12,7 +12,8 @@ const User = require('./models/user');
 const mailer = require('./modules/mailer');
 
 const app = express();
-app.set('port', process.env.PORT || 3000);
+// app.set('port', process.env.PORT || 3000);
+app.set('port', config.port);
 app.disable('x-powered-by');
 
 mongoose.Promise = global.Promise;
@@ -30,8 +31,39 @@ app.use(session({
     secret: config.cookieSecret
 }));
 
+app.use((req, res, next) => {
+    if (config.active) {
+        return next();
+    }
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.end("Проект FunnyDev в данный момент находится в разработке! ;)");
+});
+
+function authorize(req, res, next) {
+    if (!req.session.authUser) {
+        return next();
+    }
+    if (req.signedCookies.authUser) {
+        req.session.authUser = req.signedCookies.authUser;
+        res.redirect(303, '/cabinet');
+    } else {
+        return next();
+    }
+}
+
+function nonAuthorize(req, res, next) {
+    if (req.session.authUser) {
+        return next();
+    }
+    if (req.signedCookies.authUser) {
+        req.session.authUser = req.signedCookies.authUser;
+        return next();
+    }
+    res.redirect(303, '/');
+}
+
 // Routes
-app.get('/', function(req, res) {
+app.get('/', authorize, function(req, res) {
     //test
     if (req.session.authUser)
         console.log(`Session: ${req.session.authUser}`);
@@ -57,11 +89,15 @@ app.get('/', function(req, res) {
     });
 });
 
-app.get('/sign-in', function (req, res) {
+app.get('/cabinet', nonAuthorize, function (req, res) {
+    res.end('Your cabinet.');
+});
+
+app.get('/sign-in', authorize, function (req, res) {
     res.render('sign-in', { title: 'Sign in' });
 });
 
-app.get('/sign-up', function (req, res) {
+app.get('/sign-up', authorize, function (req, res) {
     res.render('sign-up', { title: 'Sign up' });
 });
 
