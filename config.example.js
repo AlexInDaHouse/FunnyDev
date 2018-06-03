@@ -2,7 +2,9 @@
 const CryptoJS = require('crypto-js');
 
 module.exports = {
-	cookieSecret: CryptoJS.SHA256('secret').toString(),
+    active: false,
+    port: 3000,
+    cookieSecret: CryptoJS.SHA256('secret').toString(),
     mongo: 'mongodb://hostname:port',
     email: {
         user: 'address@email.com',
